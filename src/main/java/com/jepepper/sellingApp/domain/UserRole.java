@@ -21,7 +21,7 @@ public class UserRole {
     @MapsId("user_id")
     private User user;
 
-    @ManyToOne(targetEntity = Role.class)
+    @ManyToOne
     @JoinColumn(name = "role_id",updatable = false,insertable = false)
     private Role role;
 

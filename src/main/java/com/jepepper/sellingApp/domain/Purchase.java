@@ -16,7 +16,7 @@ public class Purchase {
     private Long UserId;
 
     @ManyToOne
-    @JoinColumn(name = "UserId",updatable = false,insertable = false)
+    @JoinColumn(name = "user_id",updatable = false,insertable = false)
     private User user;
 
     private Double total;
