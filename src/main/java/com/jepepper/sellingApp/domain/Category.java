@@ -19,7 +19,7 @@ public class Category {
 
     private String description;
 
-    @OneToMany(targetEntity = Product.class)
+    @OneToMany(mappedBy = "category")
     private List<Product> products;
 
     /* FUNCTIONS or METHODS */

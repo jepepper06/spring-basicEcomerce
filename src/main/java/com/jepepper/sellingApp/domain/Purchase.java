@@ -12,19 +12,18 @@ public class Purchase {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "user_id")
-    private Long UserId;
+    @Column(name = "client_id")
+    private Long clientId;
 
     @ManyToOne
-    @JoinColumn(name = "user_id",updatable = false,insertable = false)
-    private User user;
+    @JoinColumn(name = "client_id",updatable = false,insertable = false)
+    private Client client;
 
     private Double total;
 
     private Boolean payed;
 
-    @OneToMany(mappedBy = "purchase",fetch = FetchType.EAGER,cascade = ALL)
-
+    @OneToMany(mappedBy = "purchase",cascade = ALL)
     private List<PurchaseProduct> products;
 
     /* FUNCTIONS or METHODS */
@@ -37,19 +36,19 @@ public class Purchase {
     }
 
     public Long getUserId() {
-        return UserId;
+        return clientId;
     }
 
-    public void setUserId(Long userId) {
-        UserId = userId;
+    public void setUserId(Long clientId) {
+        this.clientId = clientId;
     }
 
-    public User getUser() {
-        return user;
+    public Client getUser() {
+        return client;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(Client client) {
+        this.client = client;
     }
 
     public Double getTotal() {

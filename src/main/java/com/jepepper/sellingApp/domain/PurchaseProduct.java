@@ -3,10 +3,7 @@ package com.jepepper.sellingApp.domain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Entity
 public class PurchaseProduct {
@@ -24,6 +21,7 @@ public class PurchaseProduct {
 
     @ManyToOne
     @JoinColumn(name = "purchase_id",insertable = false,updatable = false)
+    @MapsId("purchase_id")
     private Purchase purchase;
 
     public PurchaseProductPK getId() {

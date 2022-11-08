@@ -21,11 +21,13 @@ public class Product {
     private Long categoryId;
     private Double price;
 
-    @ManyToOne(targetEntity = Category.class)
-    @JoinColumn(name = "category_id")
+    private Long stock;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id",insertable = false,updatable = false)
     private Category category;
-    @OneToMany(targetEntity = PurchaseProduct.class)
-    private List<PurchaseProduct> items;
+    @OneToMany(mappedBy = "product")
+    private List<PurchaseProduct> purchaseProducts;
 
     /* FUNCTIONS or METHODS */
 
@@ -61,12 +63,12 @@ public class Product {
         this.category = category;
     }
 
-    public List<PurchaseProduct> getItems() {
-        return items;
+    public List<PurchaseProduct> getPurchaseProducts() {
+        return purchaseProducts;
     }
 
-    public void setItems(List<PurchaseProduct> items) {
-        this.items = items;
+    public void setPurchaseProducts(List<PurchaseProduct> purchaseProducts) {
+        this.purchaseProducts = purchaseProducts;
     }
 
     public String getDescription() {
@@ -75,5 +77,21 @@ public class Product {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public Long getStock() {
+        return stock;
+    }
+
+    public void setStock(Long stock) {
+        this.stock = stock;
     }
 }

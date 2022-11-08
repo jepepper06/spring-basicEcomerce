@@ -6,17 +6,17 @@ import java.io.Serializable;
 
 @Embeddable
 public class UserRolePK implements Serializable {
-    @Column(name = "user_id")
-    private Long UserId;
+    @Column(name = "client_id")
+    private Long ClientId;
     @Column(name = "role_id")
     private Long RoleId;
 
     public Long getUserId() {
-        return UserId;
+        return ClientId;
     }
 
-    public void setUserId(Long userId) {
-        UserId = userId;
+    public void setUserId(Long clientId) {
+        this.ClientId = clientId;
     }
 
     public Long getRoleId() {

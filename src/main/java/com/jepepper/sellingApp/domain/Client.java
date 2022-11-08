@@ -1,14 +1,13 @@
 package com.jepepper.sellingApp.domain;
 
-import lombok.Data;
-
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-public class User {
+public class Client {
     /* ATTRIBUTES */
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String name;
@@ -18,10 +17,10 @@ public class User {
     private String email;
 
     private String password;
-    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER,targetEntity = UserRole.class)
+    @OneToMany(mappedBy = "client",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private List<UserRole> roles;
 
-    @OneToMany(mappedBy = "user",targetEntity = Purchase.class)
+    @OneToMany(mappedBy = "client",cascade = CascadeType.ALL)
     private List<Purchase> purchases;
 
     /* FUNCTIONS or METHODS */
@@ -73,5 +72,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<Purchase> getPurchases() {
+        return purchases;
+    }
+
+    public void setPurchases(List<Purchase> purchases) {
+        this.purchases = purchases;
     }
 }
