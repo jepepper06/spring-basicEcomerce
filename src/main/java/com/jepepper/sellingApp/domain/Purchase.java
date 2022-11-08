@@ -1,11 +1,16 @@
 package com.jepepper.sellingApp.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.util.List;
 
 import static javax.persistence.CascadeType.ALL;
 
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class Purchase {
     /* ATTRIBUTES */
     @Id

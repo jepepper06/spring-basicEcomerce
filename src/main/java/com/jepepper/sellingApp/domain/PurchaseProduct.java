@@ -1,11 +1,15 @@
 package com.jepepper.sellingApp.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class PurchaseProduct {
     @Autowired
     @EmbeddedId
