@@ -1,6 +1,7 @@
 package com.jepepper.sellingApp.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -25,6 +26,7 @@ public class Purchase {
     private Client client;
 
     private Double total;
+
 
     private Boolean payed;
 

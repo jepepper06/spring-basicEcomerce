@@ -1,11 +1,15 @@
 package com.jepepper.sellingApp.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.EmbeddedId;
 import java.io.Serializable;
 
 @Embeddable
+@NoArgsConstructor
+@AllArgsConstructor
 public class PurchaseProductPK implements Serializable {
     /* ATTRIBUTES */
     @Column(name = "product_id")

@@ -1,4 +1,4 @@
-package com.jepepper.sellingApp.security.interfaces;
+package com.jepepper.sellingApp.service.interfaces;
 
 import com.jepepper.sellingApp.domain.Client;
 import com.jepepper.sellingApp.domain.Purchase;
@@ -13,5 +13,5 @@ public interface IClientService {
     Client getClient(String clientName);
     List<Client> getClients();
     Purchase savePurchase(Purchase purchase);
-    void addPurchaseToClient(String username);
+
 }
