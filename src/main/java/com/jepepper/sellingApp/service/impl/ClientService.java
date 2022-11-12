@@ -1,14 +1,14 @@
-package com.jepepper.sellingApp.repository;
+package com.jepepper.sellingApp.service.impl;
 
 import com.jepepper.sellingApp.domain.Client;
 import com.jepepper.sellingApp.domain.Purchase;
 import com.jepepper.sellingApp.domain.PurchaseProduct;
 import com.jepepper.sellingApp.domain.Role;
 import com.jepepper.sellingApp.repository.ClientRepository;
+import com.jepepper.sellingApp.repository.PurchaseProductRepository;
 import com.jepepper.sellingApp.repository.PurchaseRepository;
 import com.jepepper.sellingApp.repository.RoleRepository;
 import com.jepepper.sellingApp.service.interfaces.IClientService;
-import com.jepepper.sellingApp.service.interfaces.IPurchaseService;
 import lombok.Data;
 import org.springframework.stereotype.Service;
 
@@ -22,9 +22,8 @@ import java.util.List;
 public class ClientService implements IClientService{
     private final ClientRepository clientRepo;
     private final RoleRepository roleRepo;
-
-    private final List<PurchaseProduct> products = new ArrayList<>();
     private final PurchaseRepository purchaseRepo;
+    private final PurchaseProductRepository purchaseProductRepo;
 
     @Override
     public Client saveUser(Client client) {
@@ -55,6 +54,7 @@ public class ClientService implements IClientService{
 
     @Override
     public Purchase savePurchase(Purchase purchase) {
+        purchase.getProducts().stream().map(purchaseProductRepo::save);
         return  purchaseRepo.save(purchase);
     }
 }

@@ -7,4 +7,5 @@ public interface IPurchaseService {
 
     Purchase creatingOrExpandingApurchase(PurchaseProduct purchaseProduct, long clientId) throws ClassNotFoundException;
     //Purchase showingCurrentPurchase();
+    double computingTotal(long purchaseId);
 }
