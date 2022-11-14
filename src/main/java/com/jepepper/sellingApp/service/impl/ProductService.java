@@ -4,7 +4,7 @@ import com.jepepper.sellingApp.domain.Product;
 import com.jepepper.sellingApp.repository.ProductRepository;
 import com.jepepper.sellingApp.service.interfaces.IProductService;
 import lombok.Data;
-import org.hibernate.ObjectNotFoundException;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,8 +20,8 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public List<Product> getAll() {
-        return productRepo.findAll();
+    public Page<Product> getAll() {
+        return (Page<Product>) productRepo.findAll();
     }
 
     @Override

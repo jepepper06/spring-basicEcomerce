@@ -1,20 +1,21 @@
 package com.jepepper.sellingApp.service.impl;
 
-import com.jepepper.sellingApp.domain.Client;
-import com.jepepper.sellingApp.domain.Purchase;
-import com.jepepper.sellingApp.domain.PurchaseProduct;
-import com.jepepper.sellingApp.domain.PurchaseProductPK;
+import com.jepepper.sellingApp.domain.*;
 import com.jepepper.sellingApp.repository.ClientRepository;
 import com.jepepper.sellingApp.repository.PurchaseProductRepository;
 import com.jepepper.sellingApp.repository.PurchaseRepository;
 import com.jepepper.sellingApp.service.interfaces.IPurchaseService;
 import lombok.Data;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 @Transactional
 @Service
@@ -50,6 +51,7 @@ public class PurchaseService implements IPurchaseService {
                         client.get(),
                         purchaseProduct.getTotal(),
                         false,
+                        null,
                         new ArrayList<>());
             }else
             {
@@ -60,17 +62,39 @@ public class PurchaseService implements IPurchaseService {
         PurchaseProductPK key = purchaseProduct.getId();
         key.setPurchaseId(purchase.getId());
         purchaseProduct.setId(key);
-        purchaseProductRepo.save(purchaseProduct);
 
         // ADDING PURCHASE_PRODUCT TO PURCHASE
         purchase.getProducts().add(purchaseProduct);
-        purchaseRepository.save(purchase);
         return purchase;
 
     }
 
     @Override
+    public Page<Purchase> findAll(Pageable pageable) {
+        return  purchaseRepository.findAll(pageable);
+    }
+
+    @Override
     public double computingTotal(long purchaseId) {
-        return 0.0;
+        Optional<Purchase> optionalPurchase = purchaseRepository.findById(purchaseId);
+        Purchase purchase = optionalPurchase.get();
+
+        List<Double> listOfTotalsOfPurchaseProduct =  purchase
+                .getProducts()
+                .stream()
+                .map(item -> item.getTotal()).collect(Collectors.toList());
+
+        double sum = listOfTotalsOfPurchaseProduct
+                .stream()
+                .reduce(0.0,(subtotal,item)->subtotal+item);
+        purchase.setTotal(sum);
+        return sum;
+    }
+
+    @Override
+    public void asigningPaymentMethod(long purchaseId, String paymentMethod) {
+        Optional<Purchase> optionalPurchase = purchaseRepository.findById(purchaseId);
+        Purchase purchase = optionalPurchase.get();
+        purchase.setPaymentMethod(paymentMethod);
     }
 }

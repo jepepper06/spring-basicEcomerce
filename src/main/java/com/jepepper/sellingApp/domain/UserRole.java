@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 
+import static javax.persistence.FetchType.EAGER;
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,7 +22,7 @@ public class UserRole {
     @MapsId("client_id")
     private Client client;
 
-    @ManyToOne
+    @ManyToOne(fetch = EAGER)
     @JoinColumn(name = "role_id",updatable = false,insertable = false)
     private Role role;
 

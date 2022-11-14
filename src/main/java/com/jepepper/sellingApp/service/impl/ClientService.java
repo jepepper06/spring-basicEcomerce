@@ -1,9 +1,6 @@
 package com.jepepper.sellingApp.service.impl;
 
-import com.jepepper.sellingApp.domain.Client;
-import com.jepepper.sellingApp.domain.Purchase;
-import com.jepepper.sellingApp.domain.PurchaseProduct;
-import com.jepepper.sellingApp.domain.Role;
+import com.jepepper.sellingApp.domain.*;
 import com.jepepper.sellingApp.repository.ClientRepository;
 import com.jepepper.sellingApp.repository.PurchaseProductRepository;
 import com.jepepper.sellingApp.repository.PurchaseRepository;
@@ -37,7 +34,22 @@ public class ClientService implements IClientService{
 
     @Override
     public void addRoleToClient(String clientName, String roleName) {
+        Client client = clientRepo.findByUsername(clientName);
+        Role role = roleRepo.findByName(roleName);
 
+        // SETTING USER_ROLE
+        UserRole userRole = new UserRole();
+        userRole.setRole(role);
+        userRole.setUser(client);
+
+        // SETTING EMBEDDED USER_ROLE_PK
+        UserRolePK userRolePK = userRole.getId();
+        userRolePK.setRoleId(role.getId());
+        userRolePK.setUserId(client.getId());
+        userRole.setId(userRolePK);
+
+        // ADDING USER_ROLE TO CLIENT
+        client.getRoles().add(userRole);
     }
 
     @Override
