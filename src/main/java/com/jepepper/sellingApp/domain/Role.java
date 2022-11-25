@@ -3,11 +3,10 @@ package com.jepepper.sellingApp.domain;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.List;
+
+import static javax.persistence.GenerationType.AUTO;
 
 @Entity
 @NoArgsConstructor
@@ -15,6 +14,7 @@ import java.util.List;
 public class Role {
     /* ATTRIBUTES */
     @Id
+    @GeneratedValue(strategy = AUTO)
     private Long id;
 
     @Column(name = "role_name")

@@ -7,14 +7,16 @@ import com.jepepper.sellingApp.repository.ProductRepository;
 import com.jepepper.sellingApp.repository.PurchaseProductRepository;
 import com.jepepper.sellingApp.service.interfaces.IPurchaseProductService;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 @Service
-@Data
 @Transactional
+@Data
+@Slf4j
 public class PurchaseProductService implements IPurchaseProductService {
     private final PurchaseProductRepository purchaseProductRepository;
 

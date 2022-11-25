@@ -3,8 +3,13 @@ package com.jepepper.sellingApp.filter;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,13 +27,20 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-
+@Data
+@NoArgsConstructor
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-    private final AuthenticationManager authenticationManager;
+    @Autowired
+    private static AuthenticationManager authenticationManager;
 
     public CustomAuthenticationFilter(AuthenticationManager authenticationManager) {
+        authenticationManager = super.getAuthenticationManager();
         this.authenticationManager = authenticationManager;
     }
+    public static CustomAuthenticationFilter init(){
+        return new CustomAuthenticationFilter(authenticationManager);
+    }
+
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
@@ -39,28 +51,24 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     }
 
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
+    protected void successfulAuthentication(HttpServletRequest request,
+                                            HttpServletResponse response,
+                                            FilterChain chain,
+                                            Authentication authentication)
+            throws IOException, ServletException {
         User user = (User) authentication.getAuthorities();
-        Algorithm algorithm = Algorithm.HMAC256("Enrique es marico".getBytes());
-        String accessToken = JWT.create()
-                .withSubject(user.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 10*60*1000))
-                .withIssuer(request.getRequestURL().toString())
-                .withClaim("roles",user.getAuthorities()
-                        .stream()
-                        .map(GrantedAuthority::getAuthority)
-                        .collect(Collectors.toList()))
-                .sign(algorithm);
 
-        String refreshToken = JWT.create()
-                .withSubject(user.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 6*30*24*60*60*1000 /* SIX MONTHS */))
-                .withIssuer(request.getRequestURL().toString())
-                .withClaim("roles",user.getAuthorities()
-                        .stream()
-                        .map(GrantedAuthority::getAuthority)
-                        .collect(Collectors.toList()))
-                .sign(algorithm);
+        String accessToken = JWTUtils.createToken(
+                user.getUsername(),
+                10*60*1000/* TEN MINUTES */,
+                request.getRequestURL().toString(),
+                user.getAuthorities());
+
+        String refreshToken = JWTUtils.createToken(
+                user.getUsername(),
+                6*30*24*60*60*1000/* SIX MONTHS */,
+                request.getRequestURL().toString(),
+                user.getAuthorities());
 
         Map<String,String> tokens = new HashMap<>();
         tokens.put("accessToken",accessToken);

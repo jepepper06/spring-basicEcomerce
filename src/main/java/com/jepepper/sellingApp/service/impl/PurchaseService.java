@@ -6,20 +6,22 @@ import com.jepepper.sellingApp.repository.PurchaseProductRepository;
 import com.jepepper.sellingApp.repository.PurchaseRepository;
 import com.jepepper.sellingApp.service.interfaces.IPurchaseService;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
-@Transactional
 @Service
+@Transactional
 @Data
+@Slf4j
 public class PurchaseService implements IPurchaseService {
     private final PurchaseRepository purchaseRepository;
 
@@ -66,7 +68,6 @@ public class PurchaseService implements IPurchaseService {
         // ADDING PURCHASE_PRODUCT TO PURCHASE
         purchase.getProducts().add(purchaseProduct);
         return purchase;
-
     }
 
     @Override
@@ -96,5 +97,25 @@ public class PurchaseService implements IPurchaseService {
         Optional<Purchase> optionalPurchase = purchaseRepository.findById(purchaseId);
         Purchase purchase = optionalPurchase.get();
         purchase.setPaymentMethod(paymentMethod);
+    }
+
+    @Override
+    public Purchase findById(long id) throws Exception {
+        Optional<Purchase> optionalProduct = purchaseRepository.findById(id);
+        if(!optionalProduct.isPresent()){
+            throw new Exception("PRODUCT IS NOT PRESENT");
+        }else{
+            return optionalProduct.get();
+        }
+    }
+
+    @Override
+    public void deleteById(long id) throws Exception {
+        try{
+            purchaseRepository.deleteById(id);
+        }catch (Exception e){
+            e = new Exception("CANNOT BE DELETED");
+            throw e;
+        }
     }
 }

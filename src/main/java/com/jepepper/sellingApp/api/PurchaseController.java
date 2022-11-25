@@ -19,16 +19,25 @@ public class PurchaseController {
     private final PurchaseProductService purchaseProductService;
 
 
-    @PostMapping("/cart/{productId}/{quantity}/{clientId}")
-    public ResponseEntity<?> CartFunction(@RequestParam long productId, @RequestParam int quantity, @RequestParam long clientId) throws Exception {
+    @PostMapping("/{productId}/{quantity}/{clientId}")
+    public ResponseEntity<?>
+        CartFunction(@RequestParam long productId,
+                     @RequestParam int quantity,
+                     @RequestParam long clientId)
+            throws Exception {
         try{
             PurchaseProduct purchaseProduct = purchaseProductService.takingTheOrder(productId, quantity);
             Purchase purchase = purchaseService.creatingOrExpandingApurchase(purchaseProduct, clientId);
             clientService.savePurchase(purchase);
-            return new ResponseEntity<>(null, HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(null, HttpStatus.CREATED);
         }catch (Exception e){
             e = new Exception("NOT VALIDATED ENTRIES");
             throw e;
         }
+    }
+    @DeleteMapping("/{purchaseId}")
+    public ResponseEntity<?> deleteById(@RequestParam long id) throws Exception {
+        purchaseService.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

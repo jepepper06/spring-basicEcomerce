@@ -1,4 +1,4 @@
-package com.jepepper.sellingApp.domain;
+package com.jepepper.sellingApp.domain.DbEnums;
 
 public enum PaymentMethods {
      CASH,

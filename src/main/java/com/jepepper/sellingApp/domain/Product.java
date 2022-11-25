@@ -15,7 +15,7 @@ import static javax.persistence.GenerationType.AUTO;
 public class Product {
     /* ATTRIBUTES */
     @Id
-    @GeneratedValue( strategy =  AUTO)
+    @GeneratedValue(strategy =  AUTO)
     private Long id;
 
     private String name;
@@ -31,8 +31,6 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "category_id",insertable = false,updatable = false)
     private Category category;
-    @OneToMany(mappedBy = "product")
-    private List<PurchaseProduct> purchaseProducts;
 
     /* FUNCTIONS or METHODS */
 
@@ -66,14 +64,6 @@ public class Product {
 
     public void setCategory(Category category) {
         this.category = category;
-    }
-
-    public List<PurchaseProduct> getPurchaseProducts() {
-        return purchaseProducts;
-    }
-
-    public void setPurchaseProducts(List<PurchaseProduct> purchaseProducts) {
-        this.purchaseProducts = purchaseProducts;
     }
 
     public String getDescription() {

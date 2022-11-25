@@ -1,5 +1,6 @@
 package com.jepepper.sellingApp.domain;
 
+import com.jepepper.sellingApp.domain.DbEnums.CategoryName;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -20,7 +21,7 @@ public class Category {
     @GeneratedValue(strategy = AUTO)
     private Long id;
 
-    private String name;
+    private CategoryName name;
 
     private String description;
 
@@ -36,12 +37,12 @@ public class Category {
         this.id = id;
     }
 
-    public String getName() {
+    public CategoryName getName() {
         return name;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = CategoryName.valueOf(name.toUpperCase());
     }
 
     public String getDescription() {

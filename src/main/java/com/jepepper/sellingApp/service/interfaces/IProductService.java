@@ -10,6 +10,8 @@ import java.util.Optional;
 
 public interface IProductService {
     Product saveProduct(Product product);
-    Page<Product> getAll();
+    List<Product> getAll();
     Product getById(long id) throws Exception;
+
+    Product deleteById(long id) throws Exception;
 }

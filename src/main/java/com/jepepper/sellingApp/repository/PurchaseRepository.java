@@ -11,8 +11,8 @@ public interface PurchaseRepository extends JpaRepository<Purchase, Long> {
     long countByClientId(Long clientId);
 
     /* FIND THE LAST INSERTED ELEMENT -- FIRST ATTEMPT */
-    @Query("select last(p.id) from purchase where p.client_id = ?1 limit 1")
-    long selectLastPurchase(long clientId);
-    /* FIND THE LAST INSERTED ELEMENT -- SECOND ATTEMPT */
+//    @Query("select last(p.id) from purchase where p.client_id = ?1 limit 1")
+//    long selectLastPurchase(long clientId);
+//    /* FIND THE LAST INSERTED ELEMENT -- SECOND ATTEMPT */
     Purchase findFirstByClientId(long clientId);
 }

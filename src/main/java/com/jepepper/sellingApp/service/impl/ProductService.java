@@ -4,14 +4,18 @@ import com.jepepper.sellingApp.domain.Product;
 import com.jepepper.sellingApp.repository.ProductRepository;
 import com.jepepper.sellingApp.service.interfaces.IProductService;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 @Data
+@Slf4j
 public class ProductService implements IProductService {
     private final ProductRepository productRepo;
     @Override
@@ -20,8 +24,8 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public Page<Product> getAll() {
-        return (Page<Product>) productRepo.findAll();
+    public List<Product> getAll() {
+        return productRepo.findAll();
     }
 
     @Override
@@ -34,5 +38,12 @@ public class ProductService implements IProductService {
             throw new Exception("PRODUCT NOT FOUND");
         }
         return product;
+    }
+
+    @Override
+    public Product deleteById(long id) throws Exception {
+        Optional<Product> product = productRepo.findById(id);
+        productRepo.deleteById(id);
+        return product.get();
     }
 }

@@ -1,11 +1,10 @@
 package com.jepepper.sellingApp.domain;
 
+import com.jepepper.sellingApp.domain.DbEnums.PaymentMethods;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Arrays;
 import java.util.List;
 
 import static javax.persistence.CascadeType.ALL;
