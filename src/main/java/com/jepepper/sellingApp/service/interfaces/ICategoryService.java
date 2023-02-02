@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface ICategoryService {
     Category saveCategory(Category category);
-    List<Product> getProductByCategory(long categoryId);
+    List<Product> getProductByCategoryId(long categoryId);
+    void deleteCategory(long categoryId);
 }

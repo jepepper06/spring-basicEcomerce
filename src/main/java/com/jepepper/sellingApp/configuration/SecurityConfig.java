@@ -1,78 +1,61 @@
 package com.jepepper.sellingApp.configuration;
 
-import com.jepepper.sellingApp.filter.CustomAuthenticationFilter;
-import com.jepepper.sellingApp.filter.CustomAuthorizationFilter;
+import com.jepepper.sellingApp.filter.JwtAuthFilter;
 import com.jepepper.sellingApp.service.impl.ClientService;
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @AllArgsConstructor
+@EnableWebSecurity
 public class SecurityConfig {
-
-//    private final UserDetailsService userDetailsService;
-//    private final CustomAuthorizationFilter authorizationFilter;
-
-
+    @Autowired
+    private final ClientService userDetailsService;
+    @Autowired
+    private final JwtAuthFilter authorizationFilter;
     @Bean
-    SecurityFilterChain filterChain(HttpSecurity http,AuthenticationManager authManager) throws Exception{
-//        CustomAuthenticationFilter authenticationFilter = new CustomAuthenticationFilter();
-//        authenticationFilter.setAuthenticationManager(authManager);
-//        authenticationFilter.setFilterProcessesUrl("/login");
-
+    public SecurityFilterChain filterChain(HttpSecurity http,AuthenticationManager authManager) throws Exception{
         return http
                 .csrf().disable()
                 .authorizeRequests()
+                .antMatchers("/client/login/**")
+                .permitAll()
                 .anyRequest()
                 .authenticated()
-                .and()
-                .httpBasic()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(authorizationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
     @Bean
-    UserDetailsService userDetailsService(){
-        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-        manager.createUser(
-                User
-                        .withUsername("admin")
-                        .password(passwordEncoder().encode("admin"))
-                        .roles()
-                        .build());
-        return manager;
+    public AuthenticationProvider authenticationProvider(){
+        final DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        authenticationProvider.setPasswordEncoder(passwordEncoder());
+        authenticationProvider.setUserDetailsService(userDetailsService);
+        return authenticationProvider;
     }
     @Bean
-    AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-        return http.getSharedObject(AuthenticationManagerBuilder.class)
-                .userDetailsService(userDetailsService())
-                .passwordEncoder(passwordEncoder())
-                .and()
-                .build();
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return  config.getAuthenticationManager();
     }
     @Bean
-    PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     };
 

@@ -12,14 +12,17 @@ import java.util.List;
 public class Client {
     /* ATTRIBUTES */
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    @Column(unique = true)
     private String username;
     private String email;
     private String password;
+
     @OneToMany(mappedBy = "client",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private List<UserRole> roles;
+
     @OneToMany(mappedBy = "client",cascade = CascadeType.ALL)
     private List<Purchase> purchases;
 
@@ -65,5 +68,10 @@ public class Client {
     }
     public void setPurchases(List<Purchase> purchases) {
         this.purchases = purchases;
+    }
+
+    public void addToRoles(UserRole role){
+        role.setClient(this);
+        this.roles.add(role);
     }
 }

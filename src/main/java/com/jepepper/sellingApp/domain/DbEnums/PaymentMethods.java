@@ -6,5 +6,6 @@ public enum PaymentMethods {
      CRYPTO,
      MOBILE_TRANSFER,
      ZELLE,
-     PAYPAL
+     PAYPAL,
+     NON
 }

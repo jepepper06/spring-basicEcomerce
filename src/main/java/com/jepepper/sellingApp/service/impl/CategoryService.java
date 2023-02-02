@@ -4,6 +4,7 @@ import com.jepepper.sellingApp.domain.Category;
 import com.jepepper.sellingApp.domain.Product;
 import com.jepepper.sellingApp.repository.CategoryRepository;
 import com.jepepper.sellingApp.service.interfaces.ICategoryService;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import java.util.List;
 @Transactional
 @Data
 @Slf4j
+@AllArgsConstructor
 public class CategoryService implements ICategoryService {
     private final CategoryRepository categoryRepo;
     @Override
@@ -23,7 +25,12 @@ public class CategoryService implements ICategoryService {
     }
 
     @Override
-    public List<Product> getProductByCategory(long categoryId) {
+    public List<Product> getProductByCategoryId(long categoryId) {
         return categoryRepo.findProductById(categoryId);
+    }
+
+    @Override
+    public void deleteCategory(long categoryId) {
+        categoryRepo.deleteById(categoryId);
     }
 }

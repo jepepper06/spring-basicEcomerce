@@ -5,19 +5,25 @@ import com.jepepper.sellingApp.domain.PurchaseProduct;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.List;
 
 public interface IPurchaseService {
     Purchase findById(long id) throws Exception;
 
-    Purchase creatingOrExpandingApurchase(PurchaseProduct purchaseProduct, long clientId) throws ClassNotFoundException;
+    Purchase creatingOrExpandingApurchase(PurchaseProduct purchaseProduct, long clientId) throws Exception;
+
+    List<Purchase> findAll();
+
     //Purchase showingCurrentPurchase();
     double computingTotal(long purchaseId);
-    Page<Purchase> findAll(Pageable pageable);
+    List<Purchase> findAll(int page);
 
-    void asigningPaymentMethod(long purchaseId, String paymentMenthod);
+    void payingPurchase(long purchaseId, String paymentMenthod, String reference);
 
     void deleteById(long id) throws Exception;
+
+    Purchase savePurchase(Purchase purchase);
+
+    Purchase findLastByCLientId(long clientId) throws Exception;
 
 }

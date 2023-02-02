@@ -11,7 +11,12 @@ public interface IClientService {
     Role saveRole(Role role);
     void addRoleToClient(String clientName, String roleName);
     Client getClient(String clientName);
-    List<Client> getClients();
-    Purchase savePurchase(Purchase purchase);
 
+  Purchase savePurchase(Purchase purchase);
+    List<Client> getAll(int page);
+    void deleteUser(long userId);
+
+    void changePasswordToClient(String clientName, String clientOldPassword, String newClienPassword) throws Exception;
+
+    void registryOfClient(String name, String userName,String email,String Password);
 }
