@@ -4,16 +4,22 @@ import com.jepepper.sellingApp.domain.Client;
 import com.jepepper.sellingApp.domain.Product;
 import com.jepepper.sellingApp.domain.Role;
 import com.jepepper.sellingApp.domain.UserRole;
+import com.jepepper.sellingApp.mappers.ProductMapper;
 import com.jepepper.sellingApp.service.impl.ClientService;
 import com.jepepper.sellingApp.service.impl.ProductService;
+import com.jepepper.sellingApp.service.impl.StorageProperties;
+import com.jepepper.sellingApp.service.impl.StorageService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
 
 @SpringBootApplication
+@EnableConfigurationProperties(StorageProperties.class)
 public class SellingAppApplication {
 
 	public static void main(String[] args) {
@@ -23,7 +29,8 @@ public class SellingAppApplication {
 	@Bean
 	public CommandLineRunner run(
 			ProductService productService,
-			ClientService clientService){
+			ClientService clientService,
+			StorageService storageService){
 
 		return args -> {
 			clientService.saveRole(new Role(null,"ROLE_USER",new ArrayList<>()));
@@ -44,15 +51,29 @@ public class SellingAppApplication {
 			clientService.addRoleToClient("juanse06","ROLE_SUPERADMIN");
 
 			productService.saveProduct(
-					new Product( null,
+					(new Product( null,
+							"coca_cola250cc.jpg",
 							"Coca Cola 250cc",
 							"A can of soda",
 							(Long) null,
 							1.2,
 							100L,
+							null)));
+			productService.saveProduct(
+					new Product( null,
+							"breezeice.png",
+							"Breeze Ice 250cc",
+							"A can of soda",
+							(Long) null,
+							2.4,
+							100L,
 							null));
+
+
+
+
+			//storageService.deleteAll();
+			storageService.init();
 		};
 	}
-
-
 }

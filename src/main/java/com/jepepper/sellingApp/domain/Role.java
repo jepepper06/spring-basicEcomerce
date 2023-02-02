@@ -1,5 +1,6 @@
 package com.jepepper.sellingApp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -20,6 +21,7 @@ public class Role {
     @Column(name = "role_name")
     private String roleName;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "role")
     private List<UserRole> UserRoles;
 
@@ -40,11 +42,4 @@ public class Role {
         this.roleName = roleName;
     }
 
-    public List<UserRole> getUserRoles() {
-        return UserRoles;
-    }
-
-    public void setUserRoles(List<UserRole> userRoles) {
-        this.UserRoles = userRoles;
-    }
 }

@@ -11,11 +11,11 @@ public class UserRolePK implements Serializable {
     @Column(name = "role_id")
     private Long RoleId;
 
-    public Long getUserId() {
+    public Long getClientId() {
         return ClientId;
     }
 
-    public void setUserId(Long clientId) {
+    public void setClientId(Long clientId) {
         this.ClientId = clientId;
     }
 

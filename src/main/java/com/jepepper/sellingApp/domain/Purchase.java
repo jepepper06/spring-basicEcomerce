@@ -1,5 +1,6 @@
 package com.jepepper.sellingApp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jepepper.sellingApp.domain.DbEnums.PaymentMethods;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -18,10 +19,14 @@ public class Purchase {
     private Long id;
     @Column(name = "client_id")
     private Long clientId;
-    @ManyToOne @JoinColumn(name = "client_id",updatable = false,insertable = false)
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "client_id",updatable = false,insertable = false)
     private Client client;
     private Double total;
     private Boolean payed;
+
+    private String reference;
     @Enumerated(EnumType.STRING)
     private PaymentMethods paymentMethod;
     @OneToMany(mappedBy = "purchase",cascade = ALL)
@@ -32,18 +37,6 @@ public class Purchase {
     }
     public void setId(Long id) {
         this.id = id;
-    }
-    public Long getUserId() {
-        return clientId;
-    }
-    public void setUserId(Long clientId) {
-        this.clientId = clientId;
-    }
-    public Client getUser() {
-        return client;
-    }
-    public void setUser(Client client) {
-        this.client = client;
     }
     public Double getTotal() {
         return total;
@@ -89,4 +82,17 @@ public class Purchase {
     public void setPaymentMethod(String paymentString) {
         this.paymentMethod = PaymentMethods.valueOf(paymentString.toUpperCase());
     }
+    public void addToProducts(PurchaseProduct purchaseProduct){
+        purchaseProduct.setPurchase(this);
+        this.products.add(purchaseProduct);
+    }
+
+    public String getReference() {
+        return reference;
+    }
+
+    public void setReference(String reference) {
+        this.reference = reference;
+    }
+
 }

@@ -18,6 +18,7 @@ public class Product {
     @GeneratedValue(strategy =  AUTO)
     private Long id;
 
+    private String image;
     private String name;
 
     private String description;
@@ -88,5 +89,13 @@ public class Product {
 
     public void setStock(Long stock) {
         this.stock = stock;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

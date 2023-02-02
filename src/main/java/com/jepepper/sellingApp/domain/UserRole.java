@@ -1,8 +1,10 @@
 package com.jepepper.sellingApp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+
 
 import javax.persistence.*;
 
@@ -16,10 +18,10 @@ public class UserRole {
     @Autowired
     @EmbeddedId
     private UserRolePK id;
-
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "client_id")
-    @MapsId("client_id")
+    @MapsId("ClientId")
     private Client client;
 
     @ManyToOne(fetch = EAGER)
@@ -36,11 +38,11 @@ public class UserRole {
         this.id = id;
     }
 
-    public Client getUser() {
+    public Client getClient() {
         return client;
     }
 
-    public void setUser(Client client) {
+    public void setClient(Client client) {
         this.client = client;
     }
 
@@ -51,4 +53,6 @@ public class UserRole {
     public void setRole(Role role) {
         this.role = role;
     }
+
+
 }

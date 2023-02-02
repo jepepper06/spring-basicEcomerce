@@ -1,31 +1,28 @@
 package com.jepepper.sellingApp.service.impl;
 
 import com.jepepper.sellingApp.domain.*;
-import com.jepepper.sellingApp.filter.CustomAuthorizationFilter;
 import com.jepepper.sellingApp.repository.ClientRepository;
 import com.jepepper.sellingApp.repository.PurchaseProductRepository;
 import com.jepepper.sellingApp.repository.PurchaseRepository;
 import com.jepepper.sellingApp.repository.RoleRepository;
 import com.jepepper.sellingApp.service.interfaces.IClientService;
+import com.jepepper.sellingApp.service.utils.Cast;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -37,7 +34,6 @@ public class ClientService implements IClientService, UserDetailsService {
     private final RoleRepository roleRepo;
     private final PurchaseRepository purchaseRepo;
     private final PurchaseProductRepository purchaseProductRepo;
-
 
 
     @Override
@@ -56,18 +52,15 @@ public class ClientService implements IClientService, UserDetailsService {
                 client.getPassword(),
                 authorities);
     }
-
     @Override
     public Client saveUser(Client client) {
         client.setPassword(new BCryptPasswordEncoder().encode(client.getPassword()));
         return clientRepo.save(client);
     }
-
     @Override
     public Role saveRole(Role role) {
         return roleRepo.save(role);
     }
-
     @Override
     public void  addRoleToClient(String clientName, String roleName) {
         Client client = clientRepo.findByUsername(clientName);
@@ -76,36 +69,54 @@ public class ClientService implements IClientService, UserDetailsService {
         // SETTING USER_ROLE
         UserRole userRole = new UserRole();
         userRole.setRole(role);
-        userRole.setUser(client);
+        userRole.setClient(client);
 
         // SETTING EMBEDDED USER_ROLE_PK
         UserRolePK userRolePK = new UserRolePK();
         userRolePK.setRoleId(role.getId());
-        userRolePK.setUserId(client.getId());
+        userRolePK.setClientId(client.getId());
         userRole.setId(userRolePK);
 
         // ADDING USER_ROLE TO CLIENT
-        client.getRoles().add(userRole);
+        client.addToRoles(userRole);
     }
-
     @Override
     public Client getClient(String clientName) {
-        Client client = clientRepo.findByUsername(clientName);
-        return client;
-    }
-
-    @Override
-    public List<Client> getClients() {
-        List<Client> clients = clientRepo.findAll();
-        return clients;
+        return clientRepo.findByUsername(clientName);
     }
 
     @Override
     public Purchase savePurchase(Purchase purchase) {
-        purchase.getProducts().stream().map(purchaseProductRepo::save);
         return  purchaseRepo.save(purchase);
     }
+    @Override
+    public List<Client> getAll(int page) {
+        return Cast.castList(Client.class,clientRepo.findAll(PageRequest.of(page,20)));
+    }
+    @Override
+    public void deleteUser(long userId) {
+        clientRepo.deleteById(userId);
+    }
 
+    @Override
+    public void changePasswordToClient(String clientName, String clientOldPassword, String newClienPassword) throws Exception {
+        Optional<Client> clientOptional = Optional.ofNullable(clientRepo.findByUsername(clientName));
+        if(clientOptional.isEmpty()){
+            throw new UsernameNotFoundException("USER NOT FOUND IN DB");
+        }
+        Client client =  clientOptional.get();
+        String password = client.getPassword();
+        if(clientOldPassword != password){
+            throw new Exception("That's not the proper password");
+        }
+        client.setPassword(newClienPassword);
+        clientRepo.save(client);
+    }
 
-
+    @Override
+    public void registryOfClient(String name, String userName, String email, String Password) {
+        Client client = new Client(null,name,userName,email,Password,new ArrayList<>(),new ArrayList<>());
+        addRoleToClient(client.getName(),"ROLE_USER");
+        clientRepo.save(client);
+    }
 }
