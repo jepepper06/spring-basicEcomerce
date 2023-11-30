@@ -31,8 +31,8 @@ public class SecurityConfig {
         return http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/client/login/**")
-                .permitAll()
+                .antMatchers("/client/login","/v3/api-docs/**","/swagger-ui/**")
+                .permitAll().antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest()
                 .authenticated()
                 .and()

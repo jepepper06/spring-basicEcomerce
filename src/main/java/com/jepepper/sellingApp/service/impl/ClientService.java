@@ -52,6 +52,14 @@ public class ClientService implements IClientService, UserDetailsService {
                 client.getPassword(),
                 authorities);
     }
+
+    @Override
+    public long getUserIdByUserName(String username) {
+        Client client = clientRepo.findByUsername(username);
+        Long userId = client.getId();
+        return userId;
+    }
+
     @Override
     public Client saveUser(Client client) {
         client.setPassword(new BCryptPasswordEncoder().encode(client.getPassword()));

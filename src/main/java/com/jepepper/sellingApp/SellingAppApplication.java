@@ -3,8 +3,6 @@ package com.jepepper.sellingApp;
 import com.jepepper.sellingApp.domain.Client;
 import com.jepepper.sellingApp.domain.Product;
 import com.jepepper.sellingApp.domain.Role;
-import com.jepepper.sellingApp.domain.UserRole;
-import com.jepepper.sellingApp.mappers.ProductMapper;
 import com.jepepper.sellingApp.service.impl.ClientService;
 import com.jepepper.sellingApp.service.impl.ProductService;
 import com.jepepper.sellingApp.service.impl.StorageProperties;
@@ -14,7 +12,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
 
@@ -23,7 +20,7 @@ import java.util.ArrayList;
 public class SellingAppApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SellingAppApplication.class, args);
+ 		SpringApplication.run(SellingAppApplication.class, args);
 	}
 
 	@Bean

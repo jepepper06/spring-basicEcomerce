@@ -34,7 +34,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     final String authHeader = request.getHeader(AUTHORIZATION);
     final String username;
     final String jsonWebToken;
-    if(request.getServletPath().equals("/client/login") || SecurityContextHolder.getContext().getAuthentication() != null){
+    if(request.getServletPath().equals("/client/login")
+            || request.getServletPath().equals("/v3/api-docs/**")
+            || request.getServletPath().equals("/swagger-ui/**")
+            || SecurityContextHolder.getContext().getAuthentication() != null){
       filterChain.doFilter(request,response);
       return;
     }

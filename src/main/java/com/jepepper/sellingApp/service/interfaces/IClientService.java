@@ -7,6 +7,7 @@ import com.jepepper.sellingApp.domain.Role;
 import java.util.List;
 
 public interface IClientService {
+    long getUserIdByUserName(String username);
     Client saveUser(Client client);
     Role saveRole(Role role);
     void addRoleToClient(String clientName, String roleName);

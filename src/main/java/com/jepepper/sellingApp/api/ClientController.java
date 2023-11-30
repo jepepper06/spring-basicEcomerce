@@ -31,7 +31,7 @@ public class ClientController {
         if(user != null){
             return ResponseEntity.ok(jwtUtils.generateToken(user,60*60*24*30L));
         }
-        return ResponseEntity.status(400).body("SOME ERROR HAS OCURRED");
+        return ResponseEntity.status(400).body("SOME ERROR HAS OCCURRED");
     }
     @PostMapping("/new-password")
     public ResponseEntity<String> changePassword(HttpServletRequest request,String oldPassword, String newPassword) throws Exception {
@@ -42,15 +42,15 @@ public class ClientController {
             throw e;
         }
 
-        return ResponseEntity.ok("Password changed succesfully");
+        return ResponseEntity.ok("Password changed successfully");
     }
     @PostMapping("/registry")
     public ResponseEntity<String> register(String name, String userName, String password, String email){
         try {
             clientService.registryOfClient(name, userName, email, password);
         }catch (Exception e){
-            return ResponseEntity.internalServerError().body("Registry was not succesfull");
+            return ResponseEntity.internalServerError().body("Registry was not successful");
         }
-        return ResponseEntity.ok().body("User was created succesfully");
+        return ResponseEntity.ok().body("User was created successfully");
     }
 }

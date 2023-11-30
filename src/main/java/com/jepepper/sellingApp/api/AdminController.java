@@ -29,7 +29,7 @@ public class AdminController {
     public ResponseEntity<String> deleteProduct(@PathVariable("productId") long productId) throws Exception {
         try{
             adminService.deleteProduct(productId);
-            return new ResponseEntity<>("SUCCESSFULL DELETED PRODUCT", HttpStatus.OK);
+            return new ResponseEntity<>("SUCCESSFULLY DELETED PRODUCT", HttpStatus.OK);
         }catch (Exception e){
             e = new Exception("ERROR: PRODUCT NOT DELETED");
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
@@ -40,7 +40,7 @@ public class AdminController {
     public ResponseEntity<String> deletePurchase(@PathVariable("purchaseId") long purchaseId) throws Exception {
         try{
             adminService.deletePurchase(purchaseId);
-            return new ResponseEntity<>("SUCCESSFULL DELETED PURCHASE",HttpStatus.OK);
+            return new ResponseEntity<>("SUCCESSFULLY DELETED PURCHASE",HttpStatus.OK);
         }catch (Exception e){
             e = new Exception("ERROR: PRODUCT NOT DELETED");
             return  new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
@@ -51,7 +51,7 @@ public class AdminController {
     public ResponseEntity<String> deleteUser(@PathVariable("clientId") long clientId){
         try{
             adminService.deleteUser(clientId);
-            return  new ResponseEntity<>("SUCCESFULLY DELETED USER",HttpStatus.OK);
+            return  new ResponseEntity<>("SUCCESSFULLY DELETED USER",HttpStatus.OK);
         }catch (Exception e){
             e = new Exception("ERROR: USER NOT DELETED");
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
@@ -65,7 +65,7 @@ public class AdminController {
     ) throws Exception {
         try{
             adminService.setPurchasePayedStatus(purchaseId, payed);
-            return  new ResponseEntity<>("SUCCESFULLY MODIFIED PURCHASE PAYED STATUS",HttpStatus.ACCEPTED);
+            return  new ResponseEntity<>("SUCCESSFULLY MODIFIED PURCHASE PAYED STATUS",HttpStatus.ACCEPTED);
         }catch (Exception e){
             e = new Exception("CANNOT MODIFY PROPERTY");
             return  new ResponseEntity<>(e.getMessage(),HttpStatus.FORBIDDEN);
